@@ -73,7 +73,7 @@ class Pseudolexer(Lexer):
     ID['FOR']               = FOR
     ID['ENDFOR']            = ENDFOR
     ID['IN']                = IN
-    ID['CONSTANMT']         = CONSTANT
+    ID['CONSTANT']         = CONSTANT
     ID['REPEAT']            = REPEAT
     ID['UNTIL']             = UNTIL
     ID['STEP']              = STEP
