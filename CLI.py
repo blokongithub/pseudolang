@@ -1,10 +1,14 @@
 import os
+from pseudolexer import Pseudolexer
+#from pseudoparser import Pseudoparser
+#from pseudointerpreter import PseudoInterpreter
 
 class Cli():
     def __init__(self) -> None:
         self.command = ""
         self.commands = ["run", "exit", "help", "clear", "new", "del"]
         self.running = True
+        self.lexer = Pseudolexer()
         
     def runcli(self):
         while self.running:
@@ -34,7 +38,10 @@ class Cli():
     def getcommand(self):
         if self.getfirstword(self.command) in self.commands:
             if self.getfirstword(self.command) == "run":
-                print("Running...")
+                with open (self.command.split()[1], "r") as file:
+                    data = file.read()
+                    for tok in self.lexer.tokenize(data):
+                        print('type=%r, value=%r' % (tok.type, tok.value))
                 
             elif self.getfirstword(self.command) == "exit":
                 self.exit()

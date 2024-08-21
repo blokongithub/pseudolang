@@ -1,0 +1,4 @@
+IF x = 2 THEN
+    x <- 3
+    RETURN 2
+ENDIF
