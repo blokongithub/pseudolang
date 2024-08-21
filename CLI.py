@@ -1,14 +1,16 @@
 import os
 from pseudolexer import Pseudolexer
-#from pseudoparser import Pseudoparser
-#from pseudointerpreter import PseudoInterpreter
+from pseudoparser import Pseudoparser
+#from pseudoexecute import Pseudoexecute
 
 class Cli():
     def __init__(self) -> None:
         self.command = ""
-        self.commands = ["run", "exit", "help", "clear", "new", "del"]
+        self.commands = ["run", "exit", "help", "clear", "new", "del"]   
         self.running = True
         self.lexer = Pseudolexer()
+        self.parser = Pseudoparser()
+        self.debuglexer = True
         
     def runcli(self):
         while self.running:
@@ -40,8 +42,13 @@ class Cli():
             if self.getfirstword(self.command) == "run":
                 with open (self.command.split()[1], "r") as file:
                     data = file.read()
-                    for tok in self.lexer.tokenize(data):
-                        print(tok)
+                    tree = self.parser.parse(self.lexer.tokenize(data))
+                    #result = Pseudoexecute(tree, self.parser.env)
+                    print(tree)
+                if self.debuglexer:
+                    with open("debug/debuglexer.txt", "w") as file:
+                        for token in self.lexer.tokenize(data):
+                            file.write(f"{token.type} {token.value}\n")
                 
             elif self.getfirstword(self.command) == "exit":
                 self.exit()
@@ -67,6 +74,8 @@ del - Delete a file, usage del [filename]""")
                 print("deleting file...")
                 self.deletefile(self.command.split()[1])
                 print("file deleted")
-                
+            
         else:
-            print("Invalid command, please use 'help' if you are unsure of ther commands")
+            data = self.command
+            result = self.parser.parse(self.lexer.tokenize(data))
+            print(result)

@@ -3,7 +3,9 @@ from sly import Lexer
 class Pseudolexer(Lexer):
     tokens = { 
             ID, 
-            NUMBER, 
+            NUMBER,
+            FLOAT, 
+            STRING,
             ASSIGN,
             EQ, 
             PLUS, 
@@ -49,9 +51,11 @@ class Pseudolexer(Lexer):
             CHAR_TO_CODE,
             CODE_TO_CHAR,
             USERINPUT,
-            RANDOM_INT       
+            RANDOM_INT,
+            LPAREN,
+            RPAREN,       
             }
-    literals = { '(', ')', '{', '}', '[', ']' ';' }
+    literals = {'{', '}', '[', ']' ';' }
 
     # string containing ignored characters between tokens
     ignore = ' \t'
@@ -87,12 +91,14 @@ class Pseudolexer(Lexer):
     ID['STRING_TO_REAL']    = STRING_TO_REAL
     ID['INT_TO_STRING']     = INT_TO_STRING
     ID['REAL_TO_STRING']    = REAL_TO_STRING
-    ID["CHAR_TO_CODE"]      = CHAR_TO_CODE
-    ID["CODE_TO_CHAR"]      = CODE_TO_CHAR
+    ID['CHAR_TO_CODE']      = CHAR_TO_CODE
+    ID['CODE_TO_CHAR']      = CODE_TO_CHAR
     ID['USERINPUT']         = USERINPUT
     ID['RANDOM_INT']        = RANDOM_INT
     
+    FLOAT   = r'\d+\.\d+'
     NUMBER  = r'\d+'
+    STRING  = r'\".*?\"'
     ASSIGN  = r'<-'
     EQ      = r'='
     PLUS    = r'\+'
@@ -104,6 +110,8 @@ class Pseudolexer(Lexer):
     GE      = r'>='
     GT      = r'>'
     NE      = r'!='
+    RPAREN  = r'\)'
+    LPAREN  = r'\('
     
     ignore_comment = r'\#.*'
     
@@ -118,7 +126,10 @@ class Pseudolexer(Lexer):
     def NUMBER(self, token):
         token.value = int(token.value)
         return token
-    
+    @_(r'\d+\.\d+')
+    def FLOAT(self, token):
+        token.value = float(token.value)
+        return token
     @_(r'\n+')
     def ignore_newline(self, t):
         self.lineno += t.value.count('\n')
