@@ -1,0 +1,6 @@
+.vscode
+cmake-build-debug
+CMakeLists.txt
+build
+.idea
+__pycache__
