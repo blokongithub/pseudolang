@@ -41,7 +41,7 @@ class Cli():
                 with open (self.command.split()[1], "r") as file:
                     data = file.read()
                     for tok in self.lexer.tokenize(data):
-                        print('type=%r, value=%r' % (tok.type, tok.value))
+                        print(tok)
                 
             elif self.getfirstword(self.command) == "exit":
                 self.exit()
