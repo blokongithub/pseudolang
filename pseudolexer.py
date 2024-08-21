@@ -1,20 +1,96 @@
 from sly import Lexer
 
 class Pseudolexer(Lexer):
-    # List of token names
-    tokens = { ID, NUMBER, ASSIGN, EQ, PLUS, MINUS, TIMES, DIVIDE, LPAREN, RPAREN, IF, ELSE, THEN, ENDIF, RETURN }
+    tokens = { 
+            ID, 
+            NUMBER, 
+            ASSIGN,
+            EQ, 
+            PLUS, 
+            MINUS, 
+            TIMES,
+            DIVIDE, 
+            LPAREN, 
+            RPAREN, 
+            IF, 
+            ELSE, 
+            THEN, 
+            ENDIF,
+            RETURN,
+            LT,
+            LE,
+            GT,
+            GE,
+            NE,
+            WHILE,
+            ENDWHILE,
+            FOR,
+            ENDFOR,
+            IN,
+            CONSTANT,
+            REPEAT,
+            UNTIL,
+            STEP,
+            ELSEIF,
+            MODULO,
+            DIV,
+            OUTPUT,
+            RECORD,
+            ENDRECORD,
+            SUBROUTINE,
+            ENDSUBROUTINE,
+            LEN,
+            POSITION,
+            SUBSTRING,
+            STRING_TO_INT,
+            STRING_TO_REAL,
+            INT_TO_STRING,
+            REAL_TO_STRING,
+            CHAR_TO_CODE,
+            CODE_TO_CHAR,
+            USERINPUT,
+            RANDOM_INT       
+            }
     literals = { '(', ')', '{', '}', '[', ']' ';' }
 
-    # String containing ignored characters between tokens
+    # string containing ignored characters between tokens
     ignore = ' \t'
 
-    # Regular expression rules for tokens
-    ID      = r'[a-zA-Z_][a-zA-Z0-9_]*'
-    ID['IF']        = IF
-    ID['ELSE']      = ELSE
-    ID['THEN']      = THEN
-    ID['ENDIF']     = ENDIF
-    ID['RETURN']    = RETURN
+    # regular expression rules for tokens
+    ID                      = r'[a-zA-Z_][a-zA-Z0-9_]*'
+    ID['ELSE IF']           = ELSEIF
+    ID['IF']                = IF
+    ID['ELSE']              = ELSE
+    ID['THEN']              = THEN
+    ID['ENDIF']             = ENDIF
+    ID['RETURN']            = RETURN
+    ID['WHILE']             = WHILE
+    ID['ENDWHILE']          = ENDWHILE
+    ID['FOR']               = FOR
+    ID['ENDFOR']            = ENDFOR
+    ID['IN']                = IN
+    ID['CONSTANMT']         = CONSTANT
+    ID['REPEAT']            = REPEAT
+    ID['UNTIL']             = UNTIL
+    ID['STEP']              = STEP
+    ID['MOD']               = MODULO
+    ID['DIV']               = DIV
+    ID['OUTPUT']            = OUTPUT
+    ID['RECORD']            = RECORD
+    ID['ENDRECORD']         = ENDRECORD
+    ID['SUBROUTINE']        = SUBROUTINE
+    ID['ENDSUBROUTINE']     = ENDSUBROUTINE
+    ID['LEN']               = LEN
+    ID['POSITION']          = POSITION
+    ID['SUBSTRING']         = SUBSTRING
+    ID['STRING_TO_INT']     = STRING_TO_INT
+    ID['STRING_TO_REAL']    = STRING_TO_REAL
+    ID['INT_TO_STRING']     = INT_TO_STRING
+    ID['REAL_TO_STRING']    = REAL_TO_STRING
+    ID["CHAR_TO_CODE"]      = CHAR_TO_CODE
+    ID["CODE_TO_CHAR"]      = CODE_TO_CHAR
+    ID['USERINPUT']         = USERINPUT
+    ID['RANDOM_INT']        = RANDOM_INT
     
     NUMBER  = r'\d+'
     ASSIGN  = r'<-'
@@ -23,6 +99,11 @@ class Pseudolexer(Lexer):
     MINUS   = r'-'
     TIMES   = r'\*'
     DIVIDE  = r'/'
+    LE      = r'<='
+    LT      = r'<'
+    GE      = r'>='
+    GT      = r'>'
+    NE      = r'!='
     
     ignore_comment = r'\#.*'
     
@@ -43,5 +124,5 @@ class Pseudolexer(Lexer):
         self.lineno += t.value.count('\n')
         
     def error(self, t):
-        print('Line %d: Bad character %r' % (self.lineno, t.value[0]))
+        print('line %d: bad character %r' % (self.lineno, t.value[0]))
         self.index += 1

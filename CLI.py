@@ -59,14 +59,14 @@ del - Delete a file, usage del [filename]""")
                 self.clear()
             
             elif self.getfirstword(self.command) == "new":
-                print("Creating new file...")
+                print("creating new file...")
                 self.makenewfile(self.command.split()[1])
-                print("File created")
+                print("file created")
                 
             elif self.getfirstword(self.command) == "del":
-                print("Deleting file...")
+                print("deleting file...")
                 self.deletefile(self.command.split()[1])
-                print("File deleted")
+                print("file deleted")
                 
         else:
             print("Invalid command, please use 'help' if you are unsure of ther commands")
