@@ -1,0 +1,4 @@
+a <- 2 * 3
+CONSTANT b <- 2
+
+OUTPUT a
