@@ -7,7 +7,7 @@ from pseudointepreter import PseudoCodeInterpreter
 class Cli():
     def __init__(self, debuglexer=False, debugparser=False) -> None:
         self.command = ""
-        self.commands = ["run", "exit", "help", "clear", "new", "del", "vars"]   
+        self.commands = ["run", "exit", "help", "clear", "new", "del", "vars", "compile"]   
         self.running = True
         self.lexer = PseudoCodeLexer()
         self.parser = PseudoCodeParser()
@@ -42,16 +42,11 @@ class Cli():
         
     def getcommand(self):
         if self.getfirstword(self.command) in self.commands:
-            if self.getfirstword(self.command) == "run":
+            if self.getfirstword(self.command) == "compile":
                 try:
                     with open(self.command.split()[1], "r") as file:
                         data = file.read()
                         tree = self.parser.parse(self.lexer.tokenize(data))
-                        
-                        # If you have an execution class or function, invoke it here
-                        # result = Pseudoexecute(tree, self.env)
-                        
-                        print(tree)  # Print the parse tree for debugging
                         
                         if self.debuglexer:
                             with open("debug/debuglexer.txt", "w") as debug_file:
@@ -65,6 +60,18 @@ class Cli():
                     print(f"File {self.command.split()[1]} not found.")
                 except Exception as e:
                     print(f"An error occurred: {str(e)}")
+                    
+            elif self.getfirstword(self.command) == "run":
+                try:
+                    with open(self.command.split()[1], "r") as file:
+                        data = file.read()
+                        tree = self.parser.parse(self.lexer.tokenize(data))
+                        interpreter = PseudoCodeInterpreter(tree["body"])
+                        interpreter.run()
+                except FileNotFoundError:
+                    print(f"File {self.command.split()[1]} not found.")
+                except Exception as e:
+                    print(f"An error occurred: {str(e)}")
                 
             elif self.getfirstword(self.command) == "exit":
                 self.exit()
@@ -72,6 +79,7 @@ class Cli():
             elif self.getfirstword(self.command) == "help":
                 print("""Commands:\n
 run - Runs a file, usage run [filename]\n
+compile - Compiles a file, usage compile [filename]\n
 exit - Exit the CLI\n
 help - Show this message\n
 clear - Clear the screen\n

@@ -1,5 +1,5 @@
 x <- 2
 
-IF x = 2 THEN
-    OUTPUT 2
-ENDIF
+FOR i <- 0 TO 3 STEP 2
+    OUTPUT x
+ENDFOR

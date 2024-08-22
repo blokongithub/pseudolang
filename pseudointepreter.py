@@ -24,6 +24,7 @@ class PseudoCodeInterpreter():
             case "output":      self.output(node)
             case "if":          self.if_statement(node)
             case "if_else":     self.if_else_statement(node)
+            case "for":         self.for_loop(node)
             
     def assign_variable(self, node):
         value = self.evaluate_expression(node["value"])
@@ -50,13 +51,28 @@ class PseudoCodeInterpreter():
                 self.execute(statement)
         else:
             for statement in node["else"]:
-                self.execute(statement)        
+                self.execute(statement)
+    
+    def for_loop(self, node):
+        start = self.evaluate_expression(node['start'])
+        end = self.evaluate_expression(node['end'])
+        step = self.evaluate_expression(node.get('step', {"type": "literal", "value": 1}))
+        variable_name = node['variable']
+
+        for value in range(start, end + 1, step):
+            self.variables[variable_name] = value
+            for statement in node['body']:
+                self.execute(statement)
+        del self.variables[variable_name]
                             
     def evaluate_expression(self, node):
         node_type = node['type']
 
         if node_type == 'literal':
             return node['value']
+        
+        if node_type == 'int':
+            return int(node['value'])
         
         elif node_type == 'var':
             return self.variables.get(node['name'], self.constants.get(node['name']))
