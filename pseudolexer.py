@@ -37,8 +37,8 @@ class PseudoCodeLexer(Lexer):
     IDENTIFIER['STEP'] = STEP
     IDENTIFIER['ENDFOR'] = ENDFOR
     IDENTIFIER['IN'] = IN
-    IDENTIFIER['RECORD'] = RECORD
-    IDENTIFIER['ENDRECORD'] = ENDRECORD
+    IDENTIFIER['RECORD'] = RECORD #TODO (records have not been added to the parser or interpreter)
+    IDENTIFIER['ENDRECORD'] = ENDRECORD #TODO (records have not been added to the parser or interpreter)
     IDENTIFIER['TRUE'] = TRUE
     IDENTIFIER['FALSE'] = FALSE
     IDENTIFIER['OUTPUT'] = OUTPUT

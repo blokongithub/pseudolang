@@ -56,6 +56,7 @@ class Cli():
                         if self.debugparser:
                             with open("debug/debugparser.json", "w") as debug_file:
                                 json.dump(tree, debug_file, indent=2)
+                    print("file compiled")
                 except FileNotFoundError:
                     print(f"File {self.command.split()[1]} not found.")
                 except Exception as e:

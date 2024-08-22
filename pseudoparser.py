@@ -39,7 +39,6 @@ class PseudoCodeParser(Parser):
        'subroutine_declaration',
        'subroutine_call',
        'expression_statement',
-       'record_declaration',
        'constant_declaration')
     def statement(self, p):
         return p[0]
@@ -50,6 +49,13 @@ class PseudoCodeParser(Parser):
             "type": "assign",
             "target": p.IDENTIFIER,
             "value": p.expression
+        }
+    
+    @_('IDENTIFIER ASSIGN USERINPUT')
+    def assignment(self, p):
+        return {
+            "type": "userinput",
+            "target": p.IDENTIFIER,
         }
 
     @_('IF expression THEN statement_list ENDIF')
@@ -173,14 +179,6 @@ class PseudoCodeParser(Parser):
     @_('IDENTIFIER')
     def parameter_list(self, p):
         return [p.IDENTIFIER]
-
-    @_('RECORD IDENTIFIER field_list ENDRECORD')
-    def record_declaration(self, p):
-        return {
-            "type": "record",
-            "name": p.IDENTIFIER,
-            "fields": p.field_list
-        }
 
     @_('IDENTIFIER ":" data_type')
     def field(self, p):

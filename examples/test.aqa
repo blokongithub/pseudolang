@@ -1,5 +1,5 @@
-x <- 2
+SUBROUTINE test(a, b)
+    OUTPUT(b)
+ENDSUBROUTINE
 
-FOR i <- 0 TO 3 STEP 2
-    OUTPUT x
-ENDFOR
+test(2, 3)
