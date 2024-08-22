@@ -1,0 +1,14 @@
+SUBROUTINE fib(num)
+    a <- 0
+    b <- 1
+    FOR I <- 1 TO num
+        OUTPUT a
+        temp <- a + b
+        a <- b
+        b <- temp
+    ENDFOR
+ENDSUBROUTINE
+
+fib(100)
+
+CONSTANT bc <- 2

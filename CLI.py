@@ -1,16 +1,19 @@
+import json
 import os
-from pseudolexer import Pseudolexer
-from pseudoparser import Pseudoparser
-#from pseudoexecute import Pseudoexecute
+from pseudolexer import PseudoCodeLexer
+from pseudoparser import PseudoCodeParser
+from pseudointepreter import PseudoCodeInterpreter
 
 class Cli():
-    def __init__(self) -> None:
+    def __init__(self, debuglexer=False, debugparser=False) -> None:
         self.command = ""
-        self.commands = ["run", "exit", "help", "clear", "new", "del"]   
+        self.commands = ["run", "exit", "help", "clear", "new", "del", "vars"]   
         self.running = True
-        self.lexer = Pseudolexer()
-        self.parser = Pseudoparser()
-        self.debuglexer = True
+        self.lexer = PseudoCodeLexer()
+        self.parser = PseudoCodeParser()
+        self.debuglexer = debuglexer
+        self.debugparser = debugparser
+        # self.env = {}  # Use this for storing variables if needed by the parser or executor
         
     def runcli(self):
         while self.running:
@@ -40,15 +43,28 @@ class Cli():
     def getcommand(self):
         if self.getfirstword(self.command) in self.commands:
             if self.getfirstword(self.command) == "run":
-                with open (self.command.split()[1], "r") as file:
-                    data = file.read()
-                    tree = self.parser.parse(self.lexer.tokenize(data))
-                    #result = Pseudoexecute(tree, self.parser.env)
-                    print(tree)
-                if self.debuglexer:
-                    with open("debug/debuglexer.txt", "w") as file:
-                        for token in self.lexer.tokenize(data):
-                            file.write(f"{token.type} {token.value}\n")
+                try:
+                    with open(self.command.split()[1], "r") as file:
+                        data = file.read()
+                        tree = self.parser.parse(self.lexer.tokenize(data))
+                        
+                        # If you have an execution class or function, invoke it here
+                        # result = Pseudoexecute(tree, self.env)
+                        
+                        print(tree)  # Print the parse tree for debugging
+                        
+                        if self.debuglexer:
+                            with open("debug/debuglexer.txt", "w") as debug_file:
+                                for token in self.lexer.tokenize(data):
+                                    debug_file.write(f"{token.type} {token.value}\n")
+                                    
+                        if self.debugparser:
+                            with open("debug/debugparser.json", "w") as debug_file:
+                                json.dump(tree, debug_file, indent=2)
+                except FileNotFoundError:
+                    print(f"File {self.command.split()[1]} not found.")
+                except Exception as e:
+                    print(f"An error occurred: {str(e)}")
                 
             elif self.getfirstword(self.command) == "exit":
                 self.exit()
@@ -60,22 +76,39 @@ exit - Exit the CLI\n
 help - Show this message\n
 clear - Clear the screen\n
 new - Create a new file, usage new [filename]\n
-del - Delete a file, usage del [filename]""")
+del - Delete a file, usage del [filename]\n
+vars - Show current variables (if implemented)""")
                 
             elif self.getfirstword(self.command) == "clear":
                 self.clear()
             
             elif self.getfirstword(self.command) == "new":
-                print("creating new file...")
-                self.makenewfile(self.command.split()[1])
-                print("file created")
+                try:
+                    self.makenewfile(self.command.split()[1])
+                    print("File created.")
+                except Exception as e:
+                    print(f"An error occurred while creating the file: {str(e)}")
                 
             elif self.getfirstword(self.command) == "del":
-                print("deleting file...")
-                self.deletefile(self.command.split()[1])
-                print("file deleted")
+                try:
+                    self.deletefile(self.command.split()[1])
+                    print("File deleted.")
+                except FileNotFoundError:
+                    print("File not found.")
+                except Exception as e:
+                    print(f"An error occurred while deleting the file: {str(e)}")
+                
+            elif self.getfirstword(self.command) == "vars":
+                # Assuming the parser or environment holds variables (if implemented)
+                if hasattr(self.parser, 'variables'):
+                    print(self.parser.variables)
+                else:
+                    print("No variables are currently stored.")
             
         else:
             data = self.command
-            result = self.parser.parse(self.lexer.tokenize(data))
-            print(result)
+            try:
+                result = self.parser.parse(self.lexer.tokenize(data))
+                print(result)
+            except Exception as e:
+                print(f"An error occurred: {str(e)}")
