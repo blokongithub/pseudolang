@@ -1,4 +1,5 @@
-a <- 2 * 3
-CONSTANT b <- 2
+x <- 2
 
-OUTPUT a
+IF x = 2 THEN
+    OUTPUT 2
+ENDIF
