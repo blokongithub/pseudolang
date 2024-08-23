@@ -1,0 +1,30 @@
+OUTPUT 'WELCOME TO THE CALCULATOR'
+
+SUBROUTINE add(a, b)
+    OUTPUT a + b
+ENDSUBROUTINE
+
+WHILE TRUE DO
+    OUTPUT 'Enter the first number'
+    a <- USERINPUT
+    a <- STRING_TO_INT(a)
+    OUTPUT 'Enter the second number'
+    b <- USERINPUT
+    b <- STRING_TO_INT(b)
+    OUTPUT 'Enter the operation you would like to perform'
+    OUTPUT '1. Add 2. Subtract 3. Multiply 4. Divide 5. Modulus 6. Exit'
+    operation <- USERINPUT
+    operation <- STRING_TO_INT(operation)
+    
+    IF operation = 1 THEN
+        add(a, b)
+    ELSE IF operation = 2 THEN
+        OUTPUT a - b
+    ELSE IF operation = 3 THEN
+        OUTPUT a * b
+    ELSE IF operation = 4 THEN
+        OUTPUT a / b
+    ELSE
+        OUTPUT a MOD b
+    ENDIF
+ENDWHILE

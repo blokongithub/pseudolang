@@ -7,7 +7,7 @@ class PseudoCodeLexer(Lexer):
                TRUE, FALSE, OUTPUT, USERINPUT, RANDOM_INT, LEN, POSITION,
                SUBSTRING, STRING_TO_INT, STRING_TO_REAL, INT_TO_STRING,
                REAL_TO_STRING, CHAR_TO_CODE, CODE_TO_CHAR, MOD, DIV, DO, ASSIGN,
-               SUBROUTINE, ENDSUBROUTINE }
+               SUBROUTINE, ENDSUBROUTINE, RETURN, BREAK }
 
     literals = {'=', '+', '-', '*', '/', '(', ')', '[', ']', ',', '<', '>', '≤', '≥', '≠'}
     
@@ -19,6 +19,8 @@ class PseudoCodeLexer(Lexer):
     REAL = r'\d+\.\d+'
     INT = r'\d+'
     
+    IDENTIFIER['RETURN'] = RETURN
+    IDENTIFIER['BREAK'] = BREAK
     IDENTIFIER['CONSTANT'] = CONSTANT
     IDENTIFIER['AND'] = AND
     IDENTIFIER['DO'] = DO

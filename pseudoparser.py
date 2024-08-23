@@ -39,7 +39,9 @@ class PseudoCodeParser(Parser):
        'subroutine_declaration',
        'subroutine_call',
        'expression_statement',
-       'constant_declaration')
+       'constant_declaration',
+       'break_statement',
+       'return_statement')
     def statement(self, p):
         return p[0]
 
@@ -51,6 +53,14 @@ class PseudoCodeParser(Parser):
             "value": p.expression
         }
     
+    @_('IDENTIFIER ASSIGN subroutine_call')
+    def assignment(self, p):
+        return {
+            "type": "assign",
+            "target": p.IDENTIFIER,
+            "value": p.subroutine_call
+        }
+
     @_('IDENTIFIER ASSIGN USERINPUT')
     def assignment(self, p):
         return {
@@ -58,22 +68,42 @@ class PseudoCodeParser(Parser):
             "target": p.IDENTIFIER,
         }
 
-    @_('IF expression THEN statement_list ENDIF')
+    @_('IF expression THEN statement_list else_if_list else_statement ENDIF')
     def if_statement(self, p):
         return {
-            "type": "if",
+            "type": "if_elseif",
             "condition": p.expression,
-            "then": p.statement_list
+            "then": p.statement_list,
+            "else_if": p.else_if_list,
+            "else": p.else_statement
         }
 
-    @_('IF expression THEN statement_list ELSE statement_list ENDIF')
-    def if_statement(self, p):
-        return {
-            "type": "if_else",
+    @_('else_if_list ELSE IF expression THEN statement_list')
+    def else_if_list(self, p):
+        return p.else_if_list + [{
             "condition": p.expression,
-            "then": p.statement_list0,
-            "else": p.statement_list1
-        }
+            "then": p.statement_list
+        }]
+
+    @_('empty')
+    def else_if_list(self, p):
+        return []
+
+    @_('ELSE IF expression THEN statement_list')
+    def else_if_clause(self, p):
+        return [(p.expression, p.statement_list)]
+
+    @_('ELSE statement_list')
+    def else_statement(self, p):
+        return p.statement_list
+
+    @_('empty')
+    def else_statement(self, p):
+        return None
+
+    @_('')
+    def empty(self, p):
+        return None
 
     @_('WHILE expression DO statement_list ENDWHILE')
     def while_loop(self, p):
@@ -90,6 +120,27 @@ class PseudoCodeParser(Parser):
             "body": p.statement_list,
             "condition": p.expression
         }
+    
+    @_('BREAK')
+    def break_statement(self, p):
+        return {
+            "type": "break"
+        }
+        
+    @_('RETURN expression')
+    def return_statement(self, p):
+        return {
+            "type": "return",
+            "value": p.expression
+        }
+
+    @_('RETURN')
+    def return_statement(self, p):
+        return {
+            "type": "return",
+            "value": None
+        }
+
     @_('FOR IDENTIFIER IN IDENTIFIER statement_list ENDFOR')
     def for_loop(self, p):
         return {
@@ -98,6 +149,7 @@ class PseudoCodeParser(Parser):
             "list": p.IDENTIFIER1,
             "body": p.statement_list
         }
+
     @_('FOR IDENTIFIER ASSIGN expression TO expression STEP expression statement_list ENDFOR')
     def for_loop(self, p):
         return {
@@ -221,17 +273,26 @@ class PseudoCodeParser(Parser):
             "type": "literal",
             "value": int(p.INT)
         }
+
     @_('REAL')
     def expression(self, p):
         return {
             "type": "literal",
             "value": float(p.REAL)
         }
-    @_('STRING', 'CHAR', 'TRUE', 'FALSE')
+
+    @_('STRING', 'CHAR')
     def expression(self, p):
         return {
             "type": "literal",
-            "value": p[0]
+            "value": p[0][1:-1]  # Remove the surrounding quotes
+        }
+
+    @_('TRUE', 'FALSE')
+    def expression(self, p):
+        return {
+            "type": "literal",
+            "value": True if p[0] == 'TRUE' else False
         }
 
     @_('IDENTIFIER')
@@ -361,6 +422,16 @@ class PseudoCodeParser(Parser):
             "type": "code_to_char",
             "value": p.expression
         }
+        
+    @_('USERINPUT')
+    def expression(self, p):
+        return {
+            "type": "userinput"
+        }
+    
+    @_('subroutine_call')
+    def expression(self, p):
+        return p.subroutine_call
 
     @_('expression')
     def expression_statement(self, p):
@@ -375,4 +446,3 @@ class PseudoCodeParser(Parser):
             self.errok()
         else:
             print("Syntax error at EOF")
-

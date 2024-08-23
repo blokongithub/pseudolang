@@ -1,0 +1,15 @@
+SUBROUTINE getfibatindex(index)
+    a <- 0
+    b <- 1
+    i <- 1
+    WHILE i < index DO
+        temp <- a + b
+        a <- b
+        b <- temp
+        i <- i + 1
+    ENDWHILE
+    RETURN a
+ENDSUBROUTINE
+
+OUTPUT 'Enter the index of the fibonacci number you would like to see'
+OUTPUT getfibatindex(STRING_TO_INT(USERINPUT))

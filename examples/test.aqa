@@ -1,5 +1,0 @@
-SUBROUTINE test(a, b)
-    OUTPUT(b)
-ENDSUBROUTINE
-
-test(2, 3)

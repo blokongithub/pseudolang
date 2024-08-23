@@ -7,13 +7,12 @@ from pseudointepreter import PseudoCodeInterpreter
 class Cli():
     def __init__(self, debuglexer=False, debugparser=False) -> None:
         self.command = ""
-        self.commands = ["run", "exit", "help", "clear", "new", "del", "vars", "compile"]   
+        self.commands = ["docs", "run", "exit", "help", "clear", "new", "del", "vars", "compile"]   
         self.running = True
         self.lexer = PseudoCodeLexer()
         self.parser = PseudoCodeParser()
         self.debuglexer = debuglexer
         self.debugparser = debugparser
-        # self.env = {}  # Use this for storing variables if needed by the parser or executor
         
     def runcli(self):
         while self.running:
@@ -68,6 +67,14 @@ class Cli():
                         data = file.read()
                         tree = self.parser.parse(self.lexer.tokenize(data))
                         interpreter = PseudoCodeInterpreter(tree["body"])
+                        if self.debuglexer:
+                            with open("debug/debuglexer.txt", "w") as debug_file:
+                                for token in self.lexer.tokenize(data):
+                                    debug_file.write(f"{token.type} {token.value}\n")
+                                    
+                        if self.debugparser:
+                            with open("debug/debugparser.json", "w") as debug_file:
+                                json.dump(tree, debug_file, indent=2)
                         interpreter.run()
                 except FileNotFoundError:
                     print(f"File {self.command.split()[1]} not found.")
@@ -86,10 +93,14 @@ help - Show this message\n
 clear - Clear the screen\n
 new - Create a new file, usage new [filename]\n
 del - Delete a file, usage del [filename]\n
-vars - Show current variables (if implemented)""")
+vars - Show current variables (if implemented)\n
+docs - Show documentation (if implemented)\n""")
                 
             elif self.getfirstword(self.command) == "clear":
                 self.clear()
+            
+            elif self.getfirstword(self.command) == "docs":
+                print("https://filestore.aqa.org.uk/resources/computing/AQA-8525-NG-PC.PDF")
             
             elif self.getfirstword(self.command) == "new":
                 try:
@@ -118,6 +129,7 @@ vars - Show current variables (if implemented)""")
             data = self.command
             try:
                 result = self.parser.parse(self.lexer.tokenize(data))
-                print(result)
+                interpreter = PseudoCodeInterpreter(result["body"])
+                interpreter.run()
             except Exception as e:
                 print(f"An error occurred: {str(e)}")

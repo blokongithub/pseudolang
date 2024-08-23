@@ -9,6 +9,7 @@ SUBROUTINE fib(num)
     ENDFOR
 ENDSUBROUTINE
 
-fib(100)
-
-CONSTANT bc <- 2
+OUTPUT 'How many numbers of the fibonacci sequence would you like to see?'
+count <- USERINPUT
+count <- STRING_TO_INT(count)
+fib(count)
