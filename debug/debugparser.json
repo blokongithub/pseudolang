@@ -1,0 +1,123 @@
+{
+  "type": "program",
+  "body": [
+    {
+      "type": "subroutine",
+      "name": "fib",
+      "params": [
+        "num"
+      ],
+      "body": [
+        {
+          "type": "assign",
+          "target": "a",
+          "value": {
+            "type": "literal",
+            "value": 0
+          }
+        },
+        {
+          "type": "assign",
+          "target": "b",
+          "value": {
+            "type": "literal",
+            "value": 1
+          }
+        },
+        {
+          "type": "for",
+          "variable": "I",
+          "start": {
+            "type": "literal",
+            "value": 1
+          },
+          "end": {
+            "type": "var",
+            "name": "num"
+          },
+          "step": {
+            "type": "int",
+            "value": 1
+          },
+          "body": [
+            {
+              "type": "output",
+              "value": [
+                {
+                  "type": "var",
+                  "name": "a"
+                }
+              ]
+            },
+            {
+              "type": "assign",
+              "target": "temp",
+              "value": {
+                "type": "binop",
+                "operator": "+",
+                "left": {
+                  "type": "var",
+                  "name": "a"
+                },
+                "right": {
+                  "type": "var",
+                  "name": "b"
+                }
+              }
+            },
+            {
+              "type": "assign",
+              "target": "a",
+              "value": {
+                "type": "var",
+                "name": "b"
+              }
+            },
+            {
+              "type": "assign",
+              "target": "b",
+              "value": {
+                "type": "var",
+                "name": "temp"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "output",
+      "value": [
+        {
+          "type": "literal",
+          "value": "How many numbers of the fibonacci sequence would you like to see?"
+        }
+      ]
+    },
+    {
+      "type": "userinput",
+      "target": "count"
+    },
+    {
+      "type": "assign",
+      "target": "count",
+      "value": {
+        "type": "string_to_int",
+        "value": {
+          "type": "var",
+          "name": "count"
+        }
+      }
+    },
+    {
+      "type": "call",
+      "name": "fib",
+      "args": [
+        {
+          "type": "var",
+          "name": "count"
+        }
+      ]
+    }
+  ]
+}

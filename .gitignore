@@ -4,4 +4,3 @@ CMakeLists.txt
 build
 .idea
 __pycache__
-debug
