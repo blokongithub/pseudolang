@@ -20,21 +20,22 @@ class PseudoCodeInterpreter():
         ntype = node["type"]
         
         match ntype:
-            case "assign":          self.assign_variable(node)
-            case "constant":        self.assign_constant(node)
-            case "output":          self.output(node)
-            case "if":              self.if_statement(node)
-            case "if_else":         self.if_else_statement(node)
-            case "for":             self.for_loop(node)
-            case "while":           self.while_loop(node)
-            case "repeat_until":    self.repeat_until(node)
-            case "userinput":       self.userinp(node)
-            case "record":          self.definerecord(node)
-            case "subroutine":      pass
-            case "call":            self.call_subroutine(node)
-            case "if_elseif":       self.if_elseif_statement(node)
-            case "list_assign":     self.list_assign(node)
-            case "list_call":       self.list_call(node)
+            case "assign":              self.assign_variable(node)
+            case "constant":            self.assign_constant(node)
+            case "output":              self.output(node)
+            case "if":                  self.if_statement(node)
+            case "if_else":             self.if_else_statement(node)
+            case "for":                 self.for_loop(node)
+            case "while":               self.while_loop(node)
+            case "repeat_until":        self.repeat_until(node)
+            case "userinput":           self.userinp(node)
+            case "record":              self.definerecord(node)
+            case "subroutine":          pass
+            case "call":                self.call_subroutine(node)
+            case "if_elseif":           self.if_elseif_statement(node)
+            case "list_assign":         self.list_assign(node)
+            case "list_call":           self.list_call(node)
+            case "listvalue_assign":    self.listvalue_assign(node)
             
     def assign_variable(self, node):
         if node["value"]["type"] != "call":
@@ -48,6 +49,9 @@ class PseudoCodeInterpreter():
         for i in node["value"]:
             var.append(self.evaluate_expression(i))
         self.variables[node["target"]] = var
+        
+    def listvalue_assign(self, node):
+        self.variables[node["target"]][self.evaluate_expression(node["index"])] = self.evaluate_expression(node["value"])
     
     def list_call(self, node):
         return self.variables[node["name"]][self.evaluate_expression(node["args"][0])]

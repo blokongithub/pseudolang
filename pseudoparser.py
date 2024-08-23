@@ -32,6 +32,7 @@ class PseudoCodeParser(Parser):
     @_('assignment',
        'list_assignment',
        'list_call',
+       'listvalue_assignment',
        'if_statement',
        'while_loop',
        'repeat_until_loop',
@@ -54,6 +55,15 @@ class PseudoCodeParser(Parser):
             "target": p.IDENTIFIER,
             "value": p.expression
         }
+    @_('IDENTIFIER "[" expression "]" ASSIGN expression')
+    def listvalue_assignment(self, p):
+        return {
+            "type": "listvalue_assign",
+            "target": p.IDENTIFIER,
+            "index": p.expression0,
+            "value": p.expression1
+        }
+    
     @_('empty')
     def list_assignment(self, p):
         return []
