@@ -11,7 +11,7 @@ class PseudoCodeParser(Parser):
         ('left', '<', '>', '≤', '≥', '≠', '='),
         ('left', '+', '-'),
         ('left', '*', '/', 'MOD', 'DIV'),
-        ('left', '('),
+        ('left', '(', '[', ','),
     )
 
     @_('statement_list')
@@ -30,6 +30,8 @@ class PseudoCodeParser(Parser):
         return [p.statement]
 
     @_('assignment',
+       'list_assignment',
+       'list_call',
        'if_statement',
        'while_loop',
        'repeat_until_loop',
@@ -51,6 +53,22 @@ class PseudoCodeParser(Parser):
             "type": "assign",
             "target": p.IDENTIFIER,
             "value": p.expression
+        }
+    @_('empty')
+    def list_assignment(self, p):
+        return []
+
+    
+    @_('expression_list "," expression')
+    def expression_list(self, p):
+        return p.expression_list + [p.expression]
+    
+    @_('IDENTIFIER ASSIGN "[" expression_list "]"')
+    def list_assignment(self, p):
+        return {
+            "type": "list_assign",
+            "target": p.IDENTIFIER,
+            "value": p.expression_list
         }
     
     @_('IDENTIFIER ASSIGN subroutine_call')
@@ -202,6 +220,14 @@ class PseudoCodeParser(Parser):
             "name": p.IDENTIFIER,
             "params": [],
             "body": p.statement_list
+        }
+    
+    @_('IDENTIFIER "[" expression_list "]"')
+    def list_call(self, p):
+        return {
+            "type": "list_call",
+            "name": p.IDENTIFIER,
+            "args": p.expression_list
         }
 
     @_('IDENTIFIER "(" expression_list ")"')
@@ -432,6 +458,10 @@ class PseudoCodeParser(Parser):
     @_('subroutine_call')
     def expression(self, p):
         return p.subroutine_call
+    
+    @_('list_call')
+    def expression(self, p):
+        return p.list_call
 
     @_('expression')
     def expression_statement(self, p):

@@ -33,6 +33,8 @@ class PseudoCodeInterpreter():
             case "subroutine":      pass
             case "call":            self.call_subroutine(node)
             case "if_elseif":       self.if_elseif_statement(node)
+            case "list_assign":     self.list_assign(node)
+            case "list_call":       self.list_call(node)
             
     def assign_variable(self, node):
         if node["value"]["type"] != "call":
@@ -40,6 +42,15 @@ class PseudoCodeInterpreter():
         else:
             value = self.call_subroutine(node["value"])
         self.variables[node["target"]] = value
+        
+    def list_assign(self, node):
+        var = []
+        for i in node["value"]:
+            var.append(self.evaluate_expression(i))
+        self.variables[node["target"]] = var
+    
+    def list_call(self, node):
+        return self.variables[node["name"]][self.evaluate_expression(node["args"][0])]
         
     def assign_constant(self, node):
         value = self.evaluate_expression(node["value"])
@@ -208,5 +219,7 @@ class PseudoCodeInterpreter():
             return ord(self.evaluate_expression(node["value"]))
         elif node["type"] == "code_to_char":
             return chr(self.evaluate_expression(node["value"]))
+        elif node["type"] == "list_call":
+            return self.list_call(node)
         else:
             raise ValueError("unknown expression type:", node["type"])
