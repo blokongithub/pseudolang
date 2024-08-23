@@ -1,4 +1,15 @@
-x <- [2, 3]
-OUTPUT x[0] + x[1]
-x[0] <- 3
-OUTPUT x[0] + x[1]
+SUBROUTINE fib(num)
+    a <- 0
+    b <- 1
+    FOR I <- 1 TO num
+        OUTPUT a
+        temp <- a + b
+        a <- b
+        b <- temp
+    ENDFOR
+ENDSUBROUTINE
+
+OUTPUT 'How many numbers of the fibonacci sequence would you like to see?'
+count <- USERINPUT
+count <- STRING_TO_INT(count)
+fib(count)
