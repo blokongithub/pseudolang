@@ -1,3 +1,5 @@
+# type: ignore
+
 from sly import Parser
 from pseudolexer import PseudoCodeLexer
 
