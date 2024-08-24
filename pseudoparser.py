@@ -55,6 +55,7 @@ class PseudoCodeParser(Parser):
             "target": p.IDENTIFIER,
             "value": p.expression
         }
+    
     @_('IDENTIFIER "[" expression "]" ASSIGN expression')
     def listvalue_assignment(self, p):
         return {
@@ -64,15 +65,10 @@ class PseudoCodeParser(Parser):
             "value": p.expression1
         }
     
-    @_('empty')
-    def list_assignment(self, p):
-        return []
-
-    
     @_('expression_list "," expression')
     def expression_list(self, p):
         return p.expression_list + [p.expression]
-    
+
     @_('IDENTIFIER ASSIGN "[" expression_list "]"')
     def list_assignment(self, p):
         return {
@@ -112,14 +108,17 @@ class PseudoCodeParser(Parser):
             "condition": p.expression,
             "then": p.statement_list
         }]
+    @_('IF expression THEN statement_list ENDIF')
+    def if_statement(self, p):
+        return {
+            "type": "if",
+            "condition": p.expression,
+            "then": p.statement_list
+        }
 
     @_('empty')
     def else_if_list(self, p):
         return []
-
-    @_('ELSE IF expression THEN statement_list')
-    def else_if_clause(self, p):
-        return [(p.expression, p.statement_list)]
 
     @_('ELSE statement_list')
     def else_statement(self, p):
@@ -256,10 +255,7 @@ class PseudoCodeParser(Parser):
             "args": []
         }
 
-    @_('IDENTIFIER')
-    def parameter(self, p):
-        return p.IDENTIFIER
-
+    # Remove unused 'parameter' and 'parameter_list' rules if not used
     @_('parameter_list "," IDENTIFIER')
     def parameter_list(self, p):
         return p.parameter_list + [p.IDENTIFIER]
@@ -268,20 +264,10 @@ class PseudoCodeParser(Parser):
     def parameter_list(self, p):
         return [p.IDENTIFIER]
 
-    @_('IDENTIFIER ":" data_type')
-    def field(self, p):
-        return {
-            "name": p.IDENTIFIER,
-            "type": p.data_type
-        }
+    # If 'parameter' is not used, remove it
 
-    @_('field_list field')
-    def field_list(self, p):
-        return p.field_list + [p.field]
-
-    @_('field')
-    def field_list(self, p):
-        return [p.field]
+    # Remove 'field', 'field_list', and 'data_type' if they are not used
+    # You can integrate them elsewhere if needed
 
     @_('CONSTANT IDENTIFIER ASSIGN expression')
     def constant_declaration(self, p):

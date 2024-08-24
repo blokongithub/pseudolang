@@ -3,37 +3,40 @@
   "body": [
     {
       "type": "subroutine",
-      "name": "fib",
+      "name": "BubbleSort",
       "params": [
-        "num"
+        "arr"
       ],
       "body": [
         {
           "type": "assign",
-          "target": "a",
+          "target": "n",
           "value": {
-            "type": "literal",
-            "value": 0
-          }
-        },
-        {
-          "type": "assign",
-          "target": "b",
-          "value": {
-            "type": "literal",
-            "value": 1
+            "type": "len",
+            "value": {
+              "type": "var",
+              "name": "arr"
+            }
           }
         },
         {
           "type": "for",
-          "variable": "I",
+          "variable": "i",
           "start": {
             "type": "literal",
-            "value": 1
+            "value": 0
           },
           "end": {
-            "type": "var",
-            "name": "num"
+            "type": "binop",
+            "operator": "-",
+            "left": {
+              "type": "var",
+              "name": "n"
+            },
+            "right": {
+              "type": "literal",
+              "value": 2
+            }
           },
           "step": {
             "type": "int",
@@ -41,47 +44,233 @@
           },
           "body": [
             {
-              "type": "output",
-              "value": [
-                {
-                  "type": "var",
-                  "name": "a"
-                }
-              ]
-            },
-            {
-              "type": "assign",
-              "target": "temp",
-              "value": {
+              "type": "for",
+              "variable": "j",
+              "start": {
+                "type": "literal",
+                "value": 0
+              },
+              "end": {
                 "type": "binop",
-                "operator": "+",
+                "operator": "-",
                 "left": {
-                  "type": "var",
-                  "name": "a"
+                  "type": "binop",
+                  "operator": "-",
+                  "left": {
+                    "type": "var",
+                    "name": "n"
+                  },
+                  "right": {
+                    "type": "var",
+                    "name": "i"
+                  }
                 },
                 "right": {
-                  "type": "var",
-                  "name": "b"
+                  "type": "literal",
+                  "value": 2
                 }
-              }
-            },
-            {
-              "type": "assign",
-              "target": "a",
-              "value": {
-                "type": "var",
-                "name": "b"
-              }
-            },
-            {
-              "type": "assign",
-              "target": "b",
-              "value": {
-                "type": "var",
-                "name": "temp"
-              }
+              },
+              "step": {
+                "type": "int",
+                "value": 1
+              },
+              "body": [
+                {
+                  "type": "if",
+                  "condition": {
+                    "type": "binop",
+                    "operator": ">",
+                    "left": {
+                      "type": "list_call",
+                      "name": "arr",
+                      "args": [
+                        {
+                          "type": "var",
+                          "name": "j"
+                        }
+                      ]
+                    },
+                    "right": {
+                      "type": "list_call",
+                      "name": "arr",
+                      "args": [
+                        {
+                          "type": "binop",
+                          "operator": "+",
+                          "left": {
+                            "type": "var",
+                            "name": "j"
+                          },
+                          "right": {
+                            "type": "literal",
+                            "value": 1
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "then": [
+                    {
+                      "type": "assign",
+                      "target": "temp",
+                      "value": {
+                        "type": "list_call",
+                        "name": "arr",
+                        "args": [
+                          {
+                            "type": "var",
+                            "name": "j"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "listvalue_assign",
+                      "target": "arr",
+                      "index": {
+                        "type": "var",
+                        "name": "j"
+                      },
+                      "value": {
+                        "type": "list_call",
+                        "name": "arr",
+                        "args": [
+                          {
+                            "type": "binop",
+                            "operator": "+",
+                            "left": {
+                              "type": "var",
+                              "name": "j"
+                            },
+                            "right": {
+                              "type": "literal",
+                              "value": 1
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "listvalue_assign",
+                      "target": "arr",
+                      "index": {
+                        "type": "binop",
+                        "operator": "+",
+                        "left": {
+                          "type": "var",
+                          "name": "j"
+                        },
+                        "right": {
+                          "type": "literal",
+                          "value": 1
+                        }
+                      },
+                      "value": {
+                        "type": "var",
+                        "name": "temp"
+                      }
+                    }
+                  ]
+                }
+              ]
             }
           ]
+        }
+      ]
+    },
+    {
+      "type": "list_assign",
+      "target": "arr",
+      "value": [
+        {
+          "type": "literal",
+          "value": 84
+        },
+        {
+          "type": "literal",
+          "value": 21
+        },
+        {
+          "type": "literal",
+          "value": 57
+        },
+        {
+          "type": "literal",
+          "value": 18
+        },
+        {
+          "type": "literal",
+          "value": 11
+        },
+        {
+          "type": "literal",
+          "value": 76
+        },
+        {
+          "type": "literal",
+          "value": 99
+        },
+        {
+          "type": "literal",
+          "value": 33
+        },
+        {
+          "type": "literal",
+          "value": 45
+        },
+        {
+          "type": "literal",
+          "value": 61
+        },
+        {
+          "type": "literal",
+          "value": 10
+        },
+        {
+          "type": "literal",
+          "value": 1
+        },
+        {
+          "type": "literal",
+          "value": 2
+        },
+        {
+          "type": "literal",
+          "value": 3
+        },
+        {
+          "type": "literal",
+          "value": 4
+        },
+        {
+          "type": "literal",
+          "value": 5
+        },
+        {
+          "type": "literal",
+          "value": 6
+        },
+        {
+          "type": "literal",
+          "value": 7
+        },
+        {
+          "type": "literal",
+          "value": 8
+        },
+        {
+          "type": "literal",
+          "value": 9
+        }
+      ]
+    },
+    {
+      "type": "call",
+      "name": "BubbleSort",
+      "args": [
+        {
+          "type": "var",
+          "name": "arr"
         }
       ]
     },
@@ -90,32 +279,16 @@
       "value": [
         {
           "type": "literal",
-          "value": "How many numbers of the fibonacci sequence would you like to see?"
+          "value": "SORTED ARRAY:"
         }
       ]
     },
     {
-      "type": "userinput",
-      "target": "count"
-    },
-    {
-      "type": "assign",
-      "target": "count",
-      "value": {
-        "type": "string_to_int",
-        "value": {
-          "type": "var",
-          "name": "count"
-        }
-      }
-    },
-    {
-      "type": "call",
-      "name": "fib",
-      "args": [
+      "type": "output",
+      "value": [
         {
           "type": "var",
-          "name": "count"
+          "name": "arr"
         }
       ]
     }

@@ -177,6 +177,15 @@ class PseudoCodeInterpreter():
         elif node_type == "userinput":
             return self.userinp(node)
         
+        elif node_type == "and":
+            return self.evaluate_expression(node["left"]) and self.evaluate_expression(node["right"])
+        
+        elif node_type == "or":
+            return self.evaluate_expression(node["left"]) or self.evaluate_expression(node["right"])
+    
+        elif node_type == "not":
+            return not self.evaluate_expression(node["value"])
+        
         else:
             return self.other_funcs(node)
     
@@ -198,7 +207,7 @@ class PseudoCodeInterpreter():
             
     def other_funcs(self, node):
         if node["type"] == "len":
-            return len(self.evaluate_expression(node["value"])) - 2
+            return len(self.evaluate_expression(node["value"]))
         elif node["type"] == "position":
             string = self.evaluate_expression(node["string"])
             substring = self.evaluate_expression(node["substring"])

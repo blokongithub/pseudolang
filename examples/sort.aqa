@@ -1,0 +1,18 @@
+SUBROUTINE BubbleSort(arr)
+    n <- LEN(arr)
+    
+    FOR i <- 0 TO n-2
+        FOR j <- 0 TO n - i - 2
+            IF arr[j] > arr[j+1] THEN
+                temp <- arr[j]
+                arr[j] <- arr[j+1]
+                arr[j+1] <- temp
+            ENDIF   
+        ENDFOR
+    ENDFOR
+ENDSUBROUTINE
+
+arr <- [84, 21, 57, 18, 11, 76, 99, 33, 45, 61, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+BubbleSort(arr)
+OUTPUT 'SORTED ARRAY:'
+OUTPUT arr
