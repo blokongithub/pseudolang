@@ -58,6 +58,14 @@ class PseudoCodeParser(Parser):
             "value": p.expression
         }
     
+    @_('IDENTIFIER ASSIGN "[" "]"')
+    def list_assignment(self, p):
+        return {
+            "type": "list_assign",
+            "target": p.IDENTIFIER,
+            "value": []
+        }
+    
     @_('IDENTIFIER "[" expression "]" ASSIGN expression')
     def listvalue_assignment(self, p):
         return {
@@ -438,6 +446,13 @@ class PseudoCodeParser(Parser):
     def expression(self, p):
         return {
             "type": "code_to_char",
+            "value": p.expression
+        }
+    
+    @_('ISINTEGER "(" expression ")"')
+    def expression(self, p):
+        return {
+            "type": "isinteger",
             "value": p.expression
         }
         

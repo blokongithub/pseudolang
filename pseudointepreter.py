@@ -36,7 +36,7 @@ class PseudoCodeInterpreter():
             case "list_assign":         self.list_assign(node)
             case "list_call":           self.list_call(node)
             case "listvalue_assign":    self.listvalue_assign(node)
-            
+
     def assign_variable(self, node):
         if node["value"]["type"] != "call":
             value = self.evaluate_expression(node["value"])
@@ -51,7 +51,12 @@ class PseudoCodeInterpreter():
         self.variables[node["target"]] = var
         
     def listvalue_assign(self, node):
-        self.variables[node["target"]][self.evaluate_expression(node["index"])] = self.evaluate_expression(node["value"])
+        list = self.variables[node["target"]]
+        if self.evaluate_expression(node["index"]) == len(list):
+            list.append(self.evaluate_expression(node["value"]))
+        else:
+            list[self.evaluate_expression(node["index"])] = self.evaluate_expression(node["value"])
+        self.variables[node["target"]] = list
     
     def list_call(self, node):
         return self.variables[node["name"]][self.evaluate_expression(node["args"][0])]
@@ -234,5 +239,11 @@ class PseudoCodeInterpreter():
             return chr(self.evaluate_expression(node["value"]))
         elif node["type"] == "list_call":
             return self.list_call(node)
+        elif node["type"] == "isinteger":
+            try:
+                int(self.evaluate_expression(node["value"]))
+                return True
+            except:
+                return False
         else:
             raise ValueError("unknown expression type:", node["type"])
