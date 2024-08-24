@@ -255,7 +255,6 @@ class PseudoCodeParser(Parser):
             "args": []
         }
 
-    # Remove unused 'parameter' and 'parameter_list' rules if not used
     @_('parameter_list "," IDENTIFIER')
     def parameter_list(self, p):
         return p.parameter_list + [p.IDENTIFIER]
@@ -263,12 +262,7 @@ class PseudoCodeParser(Parser):
     @_('IDENTIFIER')
     def parameter_list(self, p):
         return [p.IDENTIFIER]
-
-    # If 'parameter' is not used, remove it
-
-    # Remove 'field', 'field_list', and 'data_type' if they are not used
-    # You can integrate them elsewhere if needed
-
+    
     @_('CONSTANT IDENTIFIER ASSIGN expression')
     def constant_declaration(self, p):
         return {
