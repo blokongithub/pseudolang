@@ -13,15 +13,22 @@ SUBROUTINE BubbleSort(arr)
 ENDSUBROUTINE
 
 x <- []
-FOR i <- 0 TO 5
+inputs <- 0
+
+WHILE inputs = 0 DO
     OUTPUT 'enter values you want to sort, enter a string when you want to stop adding values'
     val <- USERINPUT
     IF ISINTEGER(val) THEN
-        x[i] <- STRING_TO_INT(val)
+        x[LEN(x)] <- STRING_TO_INT(val)
     ELSE
-        OUTPUT 'not an int'
-        BREAK
+        OUTPUT 'Sorting...'
+        inputs <- 1
     ENDIF
-ENDFOR
-BubbleSort(x)
-OUTPUT x
+ENDWHILE
+
+IF LEN(x) > 1 THEN
+    BubbleSort(x)
+    OUTPUT x
+ELSE
+    OUTPUT x
+ENDIF

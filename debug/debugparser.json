@@ -184,19 +184,26 @@
       "value": []
     },
     {
-      "type": "for",
-      "variable": "i",
-      "start": {
+      "type": "assign",
+      "target": "inputs",
+      "value": {
         "type": "literal",
         "value": 0
-      },
-      "end": {
-        "type": "literal",
-        "value": 5
-      },
-      "step": {
-        "type": "int",
-        "value": 1
+      }
+    },
+    {
+      "type": "while",
+      "condition": {
+        "type": "binop",
+        "operator": "=",
+        "left": {
+          "type": "var",
+          "name": "inputs"
+        },
+        "right": {
+          "type": "literal",
+          "value": 0
+        }
       },
       "body": [
         {
@@ -226,8 +233,11 @@
               "type": "listvalue_assign",
               "target": "x",
               "index": {
-                "type": "var",
-                "name": "i"
+                "type": "len",
+                "value": {
+                  "type": "var",
+                  "name": "x"
+                }
               },
               "value": {
                 "type": "string_to_int",
@@ -250,28 +260,65 @@
               ]
             },
             {
-              "type": "break"
+              "type": "assign",
+              "target": "inputs",
+              "value": {
+                "type": "literal",
+                "value": 1
+              }
             }
           ]
         }
       ]
     },
     {
-      "type": "call",
-      "name": "BubbleSort",
-      "args": [
-        {
-          "type": "var",
-          "name": "x"
+      "type": "if_elseif",
+      "condition": {
+        "type": "binop",
+        "operator": ">",
+        "left": {
+          "type": "len",
+          "value": {
+            "type": "var",
+            "name": "x"
+          }
+        },
+        "right": {
+          "type": "literal",
+          "value": 1
         }
-      ]
-    },
-    {
-      "type": "output",
-      "value": [
+      },
+      "then": [
         {
-          "type": "var",
-          "name": "x"
+          "type": "call",
+          "name": "BubbleSort",
+          "args": [
+            {
+              "type": "var",
+              "name": "x"
+            }
+          ]
+        },
+        {
+          "type": "output",
+          "value": [
+            {
+              "type": "var",
+              "name": "x"
+            }
+          ]
+        }
+      ],
+      "else_if": [],
+      "else": [
+        {
+          "type": "output",
+          "value": [
+            {
+              "type": "var",
+              "name": "x"
+            }
+          ]
         }
       ]
     }

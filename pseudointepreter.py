@@ -36,6 +36,7 @@ class PseudoCodeInterpreter():
             case "list_assign":         self.list_assign(node)
             case "list_call":           self.list_call(node)
             case "listvalue_assign":    self.listvalue_assign(node)
+            case "break":               return "BREAK"
 
     def assign_variable(self, node):
         if node["value"]["type"] != "call":
@@ -104,26 +105,26 @@ class PseudoCodeInterpreter():
         for value in range(start, end + 1, step):
             self.variables[variable_name] = value
             for statement in node["body"]:
-                if statement["type"] == "break":
-                    break
-                self.execute(statement)
+                if self.execute(statement) == "BREAK":
+                    return  # Exit the loop completely
         del self.variables[variable_name]
+
 
     def while_loop(self, node):
         while self.evaluate_expression(node["condition"]):
             for statement in node["body"]:
-                if statement["type"] == "break":
-                    break
-                self.execute(statement)
+                if self.execute(statement) == "BREAK":
+                    return  # Exit the loop completely
+
                 
     def repeat_until(self, node):
         while True:
             for statement in node["body"]:
-                self.execute(statement)
-                if statement["type"] == "break":
-                    break
+                if self.execute(statement) == "BREAK":
+                    return  # Exit the loop completely
             if self.evaluate_expression(node["condition"]):
-                break
+                break  # Exit the loop if the condition is met
+
     def userinp(self, node):
         if "target" in node:
             value = input(f"input for variable \"{node['target']}\": ")
